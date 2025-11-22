@@ -23,12 +23,14 @@ module.exports = (app) => {
     // Do we have any cached data in redis related to this user?
     const cachedBlogs = await client.get(req.user.id);
     // If yes, then respond to the request right away and return
-
+    if (cachedBlogs) {
+      return res.send(cachedBlogs);
+    }
     // If no, we need to respond to request and update our cache to store the data for future requests
 
     const blogs = await Blog.find({ _user: req.user.id });
-
     res.send(blogs);
+    client.set(req.user.id, JSON.stringify(blogs));
   });
 
   app.post('/api/blogs', requireLogin, async (req, res) => {
