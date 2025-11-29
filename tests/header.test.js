@@ -9,7 +9,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  // await browser.close();
+  await browser.close();
 });
 
 test('The header has the correct text', async () => {
@@ -38,4 +38,9 @@ test.only('When signed in, shows logout button', async () => {
   await page.setCookie({ name: 'session', value: sessionString });
   await page.setCookie({ name: 'session.sig', value: signature });
   await page.goto('http://localhost:3000');
+
+  await page.waitFor('a[href="/auth/logout"]');
+
+  const text = await page.$eval('a[href="/auth/logout"]', (el) => el.innerHTML);
+  expect(text).toEqual('Logout');
 });
