@@ -25,7 +25,7 @@ test('Clicking login starts OAuth flow', async () => {
   expect(url).toMatch(/accounts\.google\.com/);
 });
 
-test.only('When signed in, shows logout button', async () => {
+test('When signed in, shows logout button', async () => {
   const user = await userFactory();
   const { session, signature } = sessionFactory(user);
 
