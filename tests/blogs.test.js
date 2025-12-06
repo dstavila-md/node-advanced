@@ -1,12 +1,16 @@
-const page = require("./helpers/page");
+const Page = require("./helpers/page");
 
 let page;
 
 beforeEach(async () => {
-  page = await page.build();
+  page = await Page.build();
   await page.goto("http://localhost:3000");
 });
 
 afterEach(async () => {
   await page.close();
+});
+
+test("when logged in, can see blog creation form", async () => {
+  await page.login();
 });
