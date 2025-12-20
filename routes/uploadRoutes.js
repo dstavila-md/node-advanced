@@ -13,20 +13,22 @@ const s3 = new AWS.S3({
 
 module.exports = (app) => {
   app.get("/api/upload", requireLogin, (req, res) => {
-    const key = `${req.user.id}/${uuid()}.jpeg`;
-    s3.getSignedUrl(
-      "putObject",
-      {
-        Bucket: "des-blogster-bucket",
-        ContentType: "image/jpeg",
-        Key: key,
-      },
-      (err, url) => {
-        if (err) {
-          return res.status(500).send({ error: "Error generating signed URL" });
-        }
-        res.send({ key, url });
+    const fileType = req.query.fileType;
+    const fileExt = fileType.substring(fileType.indexOf("/") + 1);
+    const key = `${req.user.id}/${uuid()}.${fileExt}`;
+
+    const params = {
+      Bucket: "des-blogster-bucket",
+      ContentType: fileType,
+      Key: key,
+    };
+
+    s3.getSignedUrl("putObject", params, (err, url) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send({ error: "Error generating signed URL" });
       }
-    );
+      res.send({ key, url });
+    });
   });
 };
