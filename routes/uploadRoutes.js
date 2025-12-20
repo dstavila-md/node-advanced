@@ -18,7 +18,7 @@ module.exports = (app) => {
       "putObject",
       {
         Bucket: "des-blogster-bucket",
-        ContentType: "jpeg",
+        ContentType: "image/jpeg",
         Key: key,
       },
       (err, url) => {
